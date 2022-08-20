@@ -52,10 +52,7 @@ def login():
 
 	access_token = create_access_token(identity=user[0])
 	response = make_response(redirect("/"))
-	#response.set_cookie("access_token_cookie", access_token)
-
 	set_access_cookies(response, access_token)
-	print(access_token)
 
 	return response
 

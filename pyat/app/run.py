@@ -10,14 +10,15 @@ from flask_jwt_extended import (
 )
 
 from views.user_view import bp_user
+import config.config as conf
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 app.register_blueprint(bp_user)
 
-app.config["JWT_SECRET_KEY"] = "super-secret"
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 2592000
+app.config["JWT_SECRET_KEY"] = conf.JWT_SECRET_KEY
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 2592000 #1month
 app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
-app.config["JWT_COOKIE_SECURE"] = False #localのみFalse
+app.config["JWT_COOKIE_SECURE"] = conf.JWT_COOKIE_SECURE
 
 jwt = JWTManager(app)
 
@@ -53,4 +54,4 @@ def custom_unauthorized_response(_err):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    app.run(debug=True, host=conf.APP_HOST, port=conf.APP_PORT)
