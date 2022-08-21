@@ -1,8 +1,8 @@
 FROM python:3.10.6
 
-COPY ./app /src
+WORKDIR /var/www/pyat
 
-WORKDIR /src
+COPY ./app .
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt

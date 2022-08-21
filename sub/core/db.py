@@ -1,9 +1,17 @@
-import sqlite3
+#import sqlite3
+import psycopg2
 
-import constant.constant as const
+import config.config as conf
 
 
-_db_connection = sqlite3.connect(const.APP_NAME + ".db", check_same_thread=False)
+_db_connection = psycopg2.connect(
+	"postgresql://{user}:{password}@{host}:{port}/{dbname}".format(
+	user=conf.DB_USER,
+	password=conf.DB_PASSWORD,
+	host=conf.DB_HOST,
+	port=conf.DB_PORT,
+	dbname=conf.DB_NAME))
+
 
 def get_dbcon():
 	return _db_connection
@@ -28,8 +36,8 @@ def insert(table: str, values: {str:any}):
 
 	sql = "insert into " + table
 	sql += "(" + ",".join(keys)
-	sql += ") values(:"
-	sql += ",:".join(keys) + ");"
+	sql += ") values(%("
+	sql += ")s,%(".join(keys) + ")s);"
 
 	cur.execute(sql, values)
 	con.commit()
@@ -43,7 +51,7 @@ def update(table: str, values: {str:any}, where: {str:any}):
 	sql += " set "
 
 	for k in values.keys():
-		sql += k + "=:" + k + ","
+		sql += k + "=%" + k + ")s,"
 
 	sql = sql.rstrip(",") + " "
 	sql += make_sql_where(where) + ";"
