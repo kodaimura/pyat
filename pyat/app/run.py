@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, redirect
+from flask import Flask, Blueprint, redirect, render_template
 from flask_jwt_extended import (
     JWTManager,
     create_access_token, 
@@ -26,7 +26,11 @@ jwt = JWTManager(app)
 @app.get("/")
 @jwt_required()
 def index():
-    return current_user["user_name"]
+    return render_template(
+        "index.html",
+        title="pyat",
+        user_name=current_user["user_name"]
+    )
 
 
 # return jwt sub

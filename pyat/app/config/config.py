@@ -3,7 +3,7 @@ import os
 
 
 # "local" or ""
-env = os.getenv("ENV")
+env = os.getenv("EXEC_ENV")
 
 config = dotenv_values("config/env/{}.env".format(env))
 
